@@ -9,6 +9,7 @@
     test: /usr/bin/FreeCADCmd -t  TestDraft
   /TestFemApp            :
     test: /usr/bin/FreeCADCmd -t  TestFemApp
+    duration: 15m
   /TestMaterialsApp      :
     test: /usr/bin/FreeCADCmd -t  TestMaterialsApp
   /MeshTestsApp          :
