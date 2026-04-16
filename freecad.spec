@@ -140,7 +140,8 @@ Install this package to run or examine the FreeCAD test suite.
 
 
 #path that contain main FreeCAD sources for cmake
-%global tests_resultdir %{_datadir}/%{name}/tests_result/%{_arch}
+%global tests %{_datadir}/%{name}/tests
+%global tests_resultdir %{tests}/result/%{_arch}
 
 %if %{without debug_info}
 %global debug_package %{nil}
@@ -148,7 +149,7 @@ Install this package to run or examine the FreeCAD test suite.
 %endif
 
 %prep
-    %setup -T -a 0 -q -c -n FreeCAD-1.0.2
+    %setup -T -a 0 -q -c -n FreeCAD
 
 %build
      # Deal with cmake projects that tend to link excessively.
@@ -225,6 +226,12 @@ Install this package to run or examine the FreeCAD test suite.
     mv %{buildroot}%{_libdir}/freecad/share/mime %{buildroot}%{_datadir}/
     mv %{buildroot}%{_libdir}/freecad/share/thumbnailers %{buildroot}%{_datadir}/
     mv %{buildroot}%{_libdir}/freecad/share/pkgconfig %{buildroot}%{_datadir}/
+
+%if %{with tests}
+    # tests/visual is not installed by upstream CMake; copy it from source
+    mkdir -p %{buildroot}%{tests}
+    cp -a %{_vpath_srcdir}/tests/visual %{buildroot}%{tests}/
+%endif
 
 %check
 
@@ -329,8 +336,9 @@ Install this package to run or examine the FreeCAD test suite.
     %{_datadir}/pkgconfig/OndselSolver.pc
     %{_includedir}/OndselSolver/*
 
-%files testing
 %if %{with tests}
+%files testing
+    %{tests}/visual/
     %tests_resultdir/*
 %endif
 

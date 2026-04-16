@@ -1,7 +1,20 @@
 /ctest :
     test: |
-        cat /usr/share/freecad/tests_result/`uname -m`/ctest.result
-        if [ -f /usr/share/freecad/tests_result/`uname -m`/ctest.failed ]; then
+        arch=$(uname -m)
+        result_dir=/usr/share/freecad/tests/result/$arch
+        legacy_result_dir=/usr/share/freecad/tests_result/$arch
+
+        if [ -d "$result_dir" ]; then
+            selected_dir="$result_dir"
+        elif [ -d "$legacy_result_dir" ]; then
+            selected_dir="$legacy_result_dir"
+        else
+            echo "No ctest result directory found"
+            exit 1
+        fi
+
+        cat "$selected_dir/ctest.result"
+        if [ -f "$selected_dir/ctest.failed" ]; then
             exit 1
         fi
 

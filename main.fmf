@@ -2,7 +2,6 @@ prepare:
   - how: install
     copr: bpostle/IfcOpenShell
     package:
-      - python3-pip
       - xwayland-run
       - weston
       - IfcOpenShell-python3
