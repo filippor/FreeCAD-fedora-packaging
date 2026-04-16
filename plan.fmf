@@ -1,16 +1,9 @@
 summary:
     Run All FreeCAD python tests
-prepare:
-  - how: install
-    copr: bpostle/IfcOpenShell
-    package:
-      - xwayland-run
-      - weston
-      - IfcOpenShell-python3
 discover:
     how: fmf
     path: tests
     exclude:
-      - /fem_tests/*
+      - /slow_tests/*
 execute:
     how: tmt

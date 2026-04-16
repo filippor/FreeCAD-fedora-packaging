@@ -1,0 +1,14 @@
+summary:
+    Run FreeCAD slow tests
+prepare+:
+  - how: install
+    package:
+      - gmsh
+      - calculix-ccx
+discover:
+    how: fmf
+    path: tests
+    test:
+      - /slow_tests/*
+execute:
+    how: tmt

@@ -1,0 +1,11 @@
+prepare:
+  - how: install
+    copr: bpostle/IfcOpenShell
+    package:
+      - python3-pip
+      - xwayland-run
+      - weston
+      - IfcOpenShell-python3
+  - how: shell
+    script:
+      - python3 -m pip install --user pyNastran
