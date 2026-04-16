@@ -7,7 +7,7 @@
 %bcond_without bundled_smesh
 # rpmbuild --without=bundled_gtest:  don't use bundled version of gtest and gmock
 %bcond_with bundled_gtest
-%bcond_without netgen
+%bcond_with netgen
 
 # rpmbuild --without=tests   exclude tests in %%check
 %bcond_without tests
