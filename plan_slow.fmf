@@ -9,7 +9,7 @@ prepare+:
       - python3-numpy
   - how: shell
     script:
-      - pip install  pyNastran
+      - python3 -m pip install --no-deps pyNastran
 discover:
     how: fmf
     path: tests
