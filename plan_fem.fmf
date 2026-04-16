@@ -1,10 +1,5 @@
 summary:
     Run FreeCAD FEM tests
-provision:
-    hardware:
-        gpu:
-            device-name: GK210 (Tesla K80)
-            vendor-name: NVIDIA
 prepare:
   - how: install
     copr: bpostle/IfcOpenShell
