@@ -6,6 +6,3 @@ prepare:
       - xwayland-run
       - weston
       - IfcOpenShell-python3
-  - how: shell
-    script:
-      - python3 -m pip install --user pyNastran

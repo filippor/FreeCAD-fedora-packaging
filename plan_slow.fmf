@@ -5,6 +5,11 @@ prepare+:
     package:
       - gmsh
       - calculix-ccx
+      - python3-pip
+      - python3-numpy
+  - how: shell
+    script:
+      - python3 -m pip install --user --no-deps pyNastran
 discover:
     how: fmf
     path: tests
