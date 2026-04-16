@@ -7,6 +7,7 @@
 %bcond_without bundled_smesh
 # rpmbuild --without=bundled_gtest:  don't use bundled version of gtest and gmock
 %bcond_with bundled_gtest
+%bcond_with netgen
 
 # rpmbuild --without=tests   exclude tests in %%check
 %bcond_without tests
@@ -51,13 +52,16 @@ BuildRequires: gtest-devel gmock-devel
 %endif
 
 # Development Libraries
-BuildRequires:boost-devel Coin4-devel eigen3-devel freeimage-devel fmt-devel libglvnd-devel libicu-devel libspnav-devel libXmu-devel med-devel mesa-libEGL-devel mesa-libGLU-devel netgen-mesher-devel netgen-mesher-devel-private opencascade-devel openmpi-devel python3 python3-devel python3-lark python3-matplotlib python3-pivy python3-pybind11 python3-pyside6-devel python3-shiboken6-devel pyside6-tools qt6-qttools-static qt6-qtsvg-devel vtk-devel xerces-c-devel yaml-cpp-devel
+BuildRequires:boost-devel Coin4-devel eigen3-devel freeimage-devel fmt-devel libglvnd-devel libicu-devel libspnav-devel libXmu-devel med-devel mesa-libEGL-devel mesa-libGLU-devel opencascade-devel openmpi-devel python3 python3-devel python3-lark python3-matplotlib python3-pivy python3-pybind11 python3-pyside6-devel python3-shiboken6-devel pyside6-tools qt6-qttools-static qt6-qtsvg-devel vtk-devel xerces-c-devel yaml-cpp-devel
 #pcl-devel
 %if %{without bundled_smesh}
 BuildRequires:  smesh-devel
 %endif
 %if %{without bundled_zipios}
 BuildRequires:  zipios++-devel
+%endif
+%if %{with netgen}
+BuildRequires: python3-netgen-mesher netgen-mesher-devel netgen-mesher-devel-private
 %endif
 %if %{without bundled_pycxx}
 BuildRequires:  python3-pycxx-devel
@@ -159,6 +163,9 @@ Development file for OndselSolver
     %endif
     %if %{without bundled_smesh}
         -DFREECAD_USE_EXTERNAL_SMESH=TRUE \
+    %endif
+    %if %{with netgen}
+        -DBUILD_FEM_NETGEN=TRUE \
     %endif
     %if %{without bundled_zipios}
         -DFREECAD_USE_EXTERNAL_ZIPIOS=TRUE \
