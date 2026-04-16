@@ -3,6 +3,7 @@ summary:
 provision:
     hardware:
         gpu:
+            device-name: GK210 (Tesla K80)
             vendor-name: NVIDIA
 prepare:
   - how: install

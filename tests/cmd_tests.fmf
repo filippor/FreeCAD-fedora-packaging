@@ -37,4 +37,6 @@
     test: /usr/bin/FreeCADCmd -t  UnicodeTests
   /TestPythonSyntax      :
     test: /usr/bin/FreeCADCmd -t  TestPythonSyntax
+  /TestFemApp:
+    test: /usr/bin/FreeCADCmd -t  TestFemApp
 
