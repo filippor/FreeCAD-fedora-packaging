@@ -7,9 +7,15 @@ prepare+:
       - calculix-ccx
       - python3-pip
       - python3-numpy
+      - python3-scipy
+      - python3-matplotlib
+      - python3-cpylog
+      - python3-docopt-ng
+      - python3-colorama
   - how: shell
     script:
       - python3 -m pip install --no-deps pyNastran
+      - python3 -c "import pyNastran; print(pyNastran.__version__)"
 discover:
     how: fmf
     path: tests
