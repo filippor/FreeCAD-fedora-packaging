@@ -128,6 +128,16 @@ Requires:       %{name} = %{epoch}:%{version}-%{release}
 %description libondselsolver-devel
 Development file for OndselSolver
 
+%package testing
+Summary:        FreeCAD developer tests and test results
+BuildArch:      noarch
+Requires:       %{name} = %{epoch}:%{version}-%{release}
+
+%description testing
+Developer tests for FreeCAD and their execution results. This package contains
+test executables, test data, and test result artifacts generated during the build.
+Install this package to run or examine the FreeCAD test suite.
+
 
 #path that contain main FreeCAD sources for cmake
 %global tests_resultdir %{_datadir}/%{name}/tests_result/%{_arch}
@@ -308,9 +318,6 @@ Development file for OndselSolver
     %{_datadir}/thumbnailers/*
     #find a way to configure in cmake with %%name to avoid conflict with different package name
     %{python3_sitelib}/freecad/*
-%if %{with tests}
-    %tests_resultdir/*
-%endif
 
 
 %files data
@@ -321,5 +328,10 @@ Development file for OndselSolver
 %files libondselsolver-devel
     %{_datadir}/pkgconfig/OndselSolver.pc
     %{_includedir}/OndselSolver/*
+
+%files testing
+%if %{with tests}
+    %tests_resultdir/*
+%endif
 
 %changelog
