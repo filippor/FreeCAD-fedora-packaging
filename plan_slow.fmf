@@ -9,12 +9,11 @@ prepare+:
       - python3-numpy
       - python3-scipy
       - python3-matplotlib
-      - python3-cpylog
-      - python3-docopt-ng
       - python3-colorama
+      - python3-docopt-ng
   - how: shell
     script:
-      - python3 -m pip install --no-deps pyNastran
+      - python3 -m pip install pyNastran
       - python3 -c "import pyNastran; print(pyNastran.__version__)"
 discover:
     how: fmf
