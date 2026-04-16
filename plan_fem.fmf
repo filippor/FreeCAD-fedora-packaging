@@ -1,16 +1,22 @@
 summary:
-    Run All FreeCAD python tests
+    Run FreeCAD FEM tests
+provision:
+    hardware:
+        gpu:
+            vendor-name: NVIDIA
 prepare:
   - how: install
     copr: bpostle/IfcOpenShell
     package:
       - xwayland-run
       - weston
+      - gmsh
       - IfcOpenShell-python3
+      - calculix-ccx
 discover:
     how: fmf
     path: tests
-    exclude:
+    test:
       - /fem_tests/*
 execute:
     how: tmt

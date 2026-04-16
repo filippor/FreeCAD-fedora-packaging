@@ -7,9 +7,6 @@
         test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestCAMApp
     /TestDraft             :
         test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestDraft
-    /TestFemApp            :
-        test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestFemApp
-        duration: 60m
     /TestMaterialsApp      :
         test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestMaterialsApp
     /MeshTestsApp          :
@@ -46,9 +43,6 @@
         test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestCAMGui
     /TestDraftGui          :
         test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestDraftGui
-    /TestFemGui            :
-        test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestFemGui
-        duration: 60m
     /TestImportGui         :
         test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestImportGui
     /TestMaterialsGui      :

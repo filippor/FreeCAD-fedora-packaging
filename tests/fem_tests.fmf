@@ -1,0 +1,12 @@
+/tests:
+  /cmd_tests:
+    /TestFemApp:
+      test: /usr/bin/FreeCADCmd -t  TestFemApp
+      duration: 60m
+  /gui_tests:
+    /TestFemApp:
+      test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestFemApp
+      duration: 60m
+    /TestFemGui:
+      test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestFemGui
+      duration: 60m
