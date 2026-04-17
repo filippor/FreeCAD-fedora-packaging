@@ -338,8 +338,7 @@ Install this package to run or examine the FreeCAD test suite.
 
 %if %{with tests}
 %files testing
-    %{tests}/visual/
-    %tests_resultdir/*
+    %{tests}/*
 %endif
 
 %changelog
