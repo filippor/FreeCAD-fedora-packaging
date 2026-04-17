@@ -13,7 +13,7 @@ prepare+:
       - python3-docopt-ng
   - how: shell
     script:
-      - python3 -m pip install --no-deps cpylog pyNastran
+      - python3 -m pip install cpylog pyNastran
       - python3 -c "from pyNastran.bdf.bdf import BDF; import pyNastran; print(pyNastran.__version__)"
 discover:
     how: fmf

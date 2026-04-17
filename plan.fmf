@@ -2,7 +2,7 @@ summary:
     Run All FreeCAD python tests
 discover:
     how: fmf
-    path: tests
+    path: /usr/share/freecad/tests
     exclude:
       - /slow_tests/*
 execute:
