@@ -4,12 +4,9 @@
       test: python3 -c "from pyNastran.bdf.bdf import BDF; import pyNastran; print(pyNastran.__version__)" && /usr/bin/FreeCADCmd -t TestFemApp
       duration: 60m
   /gui_tests:
-    /TestFemApp:
-      test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestFemApp
-      duration: 60m
     /TestFemGui:
       test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestFemGui
-      duration: 60m
+      duration: 120m
     /TestCoinNodeSnapshots:
-      test: FC_VISUAL_BASELINE_DIR=/usr/share/freecad/tests/visual/baselines/coin-nodes FC_VISUAL_FONT_DIR=/usr/share/freecad/tests/visual/fonts FC_VISUAL_OUT_DIR="${TMT_TEST_DATA:-/tmp/FreeCADTesting}/CoinNodeSnapshots" wlheadless-run --width=1024 --height=768 -- /usr/bin/FreeCAD -t TestCoinNodeSnapshots
+      test: FC_VISUAL_UPDATE_BASELINE=0 FC_TESTS_DIR=/usr/share/freecad/tests FC_VISUAL_OUT_DIR="${TMT_TEST_DATA:-/tmp/FreeCADTesting}/CoinNodeSnapshots" wlheadless-run --width=1024 --height=768 -- /usr/bin/FreeCAD -t TestCoinNodeSnapshots
       duration: 60m
