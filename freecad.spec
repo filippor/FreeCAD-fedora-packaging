@@ -43,7 +43,7 @@ Source0:        freecad-sources.tar.gz
 %global bundled_ondsel_solver_version 1.0.1
 
 # Utilities
-BuildRequires:  cmake gcc-c++ gettext doxygen swig graphviz gcc-gfortran desktop-file-utils tbb-devel ninja-build strace
+BuildRequires:  cmake gcc-c++ gettext doxygen swig graphviz gcc-gfortran desktop-file-utils tbb-devel ninja-build strace ccache
 %if %{with tests}
 BuildRequires:  python3-typing-extensions xwayland-run weston
 %if %{without bundled_gtest}
