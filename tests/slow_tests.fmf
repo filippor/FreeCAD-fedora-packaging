@@ -11,7 +11,7 @@
       test: |
         OUT="${TMT_TEST_DATA:-/tmp/FreeCADTesting}/CoinNodeSnapshots"
         REPORT="$OUT/report.html"
-        FC_VISUAL_UPDATE_BASELINE=0 FC_TESTS_DIR=/usr/share/freecad/ FC_VISUAL_OUT_DIR="$OUT" wlheadless-run --width=1024 --height=768 -- /usr/bin/FreeCAD -t TestCoinNodeSnapshots
+        FC_VISUAL_UPDATE_BASELINE=0 FC_TESTS_DIR=/usr/share/freecad/tests FC_VISUAL_OUT_DIR="$OUT" wlheadless-run --width=1024 --height=768 -- /usr/bin/FreeCAD -t TestCoinNodeSnapshots
         rc=$?
         python3 "$(dirname "$0")/../scripts/coin_snapshot_report.py" "$OUT" || true
 
