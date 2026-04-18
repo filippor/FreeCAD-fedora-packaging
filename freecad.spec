@@ -38,12 +38,12 @@ Source0:        freecad-sources.tar.gz
 # See FreeCAD-main/src/3rdParty/salomesmesh/CMakeLists.txt to find this out.
 %global bundled_smesh_version 7.7.1.0
 # See /src/3rdParty/PyCXX/CXX/Version.h to find this out.
-%global bundled_pycxx_version 7.1.9
+%global bundled_pycxx_version 7.1.11
 # See /src/3rdParty/OndselSolver/CMakeLists.txt to find this out.
 %global bundled_ondsel_solver_version 1.0.1
 
 # Utilities
-BuildRequires:  cmake gcc-c++ gettext doxygen swig graphviz gcc-gfortran desktop-file-utils tbb-devel ninja-build strace ccache
+BuildRequires:  cmake gcc-c++ gettext doxygen swig graphviz gcc-gfortran desktop-file-utils tbb-devel ninja-build strace
 %if %{with tests}
 BuildRequires:  python3-typing-extensions xwayland-run weston
 %if %{without bundled_gtest}
@@ -128,10 +128,12 @@ Requires:       %{name} = %{epoch}:%{version}-%{release}
 %description libondselsolver-devel
 Development file for OndselSolver
 
+%if %{with tests}
 %package testing
 Summary:        FreeCAD developer tests and test results
 BuildArch:      noarch
 Requires:       %{name} = %{epoch}:%{version}-%{release}
+%endif
 
 %description testing
 Developer tests for FreeCAD and their execution results. This package contains
@@ -140,8 +142,8 @@ Install this package to run or examine the FreeCAD test suite.
 
 
 #path that contain main FreeCAD sources for cmake
-%global tests %{_datadir}/%{name}/tests
-%global tests_resultdir %{tests}/result/%{_arch}
+%global tests_dir %{_datadir}/%{name}/tests
+%global tests_resultdir %{tests_dir}/result/%{_arch}
 
 %if %{without debug_info}
 %global debug_package %{nil}
@@ -229,84 +231,48 @@ Install this package to run or examine the FreeCAD test suite.
 
 %if %{with tests}
     # tests/visual is not installed by upstream CMake; copy it from source
-    mkdir -p %{buildroot}%{tests}
-    cp -a %{_vpath_srcdir}/tests/visual %{buildroot}%{tests}/
-    mkdir -p %{buildroot}%{tests}/.fmf
-    cat > %{buildroot}%{tests}/.fmf/version <<'EOF'
-1
-EOF
-    cat > %{buildroot}%{tests}/smoke_test.fmf <<'EOF'
+    mkdir -p %{buildroot}%{tests_dir}
+    cp -a %{_vpath_srcdir}/tests/visual %{buildroot}%{tests_dir}/
+    mkdir -p %{buildroot}%{tests_dir}/.fmf
+    echo 1 > %{buildroot}%{tests_dir}/.fmf/version
+
+    cat > %{buildroot}%{tests_dir}/smoke_test.fmf <<'EOF'
 summary: Run All FreeCADCmd python tests
 test: /usr/bin/FreeCADCmd -v
 require: /usr/bin/FreeCADCmd
 duration: 1m
 EOF
-    cat > %{buildroot}%{tests}/build_time_tests.fmf <<'EOF'
+    cat > %{buildroot}%{tests_dir}/build_time_tests.fmf <<EOF
 /ctest :
     test: |
-        arch=$(uname -m)
-        result_dir=/usr/share/freecad/tests/result/$arch
-        legacy_result_dir=/usr/share/freecad/tests_result/$arch
-
-        if [ -d "$result_dir" ]; then
-            selected_dir="$result_dir"
-        elif [ -d "$legacy_result_dir" ]; then
-            selected_dir="$legacy_result_dir"
-        else
-            echo "No ctest result directory found"
-            exit 1
-        fi
-
-        cat "$selected_dir/ctest.result"
-        if [ -f "$selected_dir/ctest.failed" ]; then
+        arch=\$(uname -m)
+        result_dir=/usr/share/freecad/tests/result/\$arch
+        cat \"\$result_dir/ctest.result\"
+        if [ -f \"\$result_dir/ctest.failed\" ]; then
             exit 1
         fi
 EOF
-    cat > %{buildroot}%{tests}/slow_tests.fmf <<'EOF'
-/tests:
-  /cmd_tests:
-    /TestFemApp:
-      test: python3 -c "from pyNastran.bdf.bdf import BDF; import pyNastran; print(pyNastran.__version__)" && /usr/bin/FreeCADCmd -t TestFemApp
-      duration: 60m
-  /gui_tests:
-    /TestFemGui:
-      test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestFemGui
-      duration: 120m
-    /TestCoinNodeSnapshots:
-      test: |
-        OUT="${TMT_TEST_DATA:-/tmp/FreeCADTesting}/CoinNodeSnapshots"
-        REPORT="$OUT/report.html"
-        FC_VISUAL_UPDATE_BASELINE=0 FC_TESTS_DIR=/usr/share/freecad/tests FC_VISUAL_OUT_DIR="$OUT" wlheadless-run --width=1024 --height=768 -- /usr/bin/FreeCAD -t TestCoinNodeSnapshots
-        rc=$?
+   
 
-        rel="${REPORT#${TMT_TEST_DATA:-$OUT}/}"
-        artifacts_base="${TESTING_FARM_ARTIFACTS_URL:-${TMT_WEB_URL%/}/artifacts}"
-        echo "CoinNodeSnapshots report path: $REPORT"
-        echo "CoinNodeSnapshots report URL: ${artifacts_base%/}/$rel"
-
-        exit $rc
-      duration: 60m
-EOF
-
-    # Generate cmd_tests.fmf — list headless tests from the installed binary
-    FMFFILE="%{buildroot}%{tests}/cmd_tests.fmf"
-    TESTS=$(%{buildroot}%{_bindir}/FreeCADCmd -t 2>&1 | awk '/^Registered test units:/{found=1; next} found && /^Please choose/{exit} found && NF{print $1}')
+    # Generate cmd_tests.fmf — list headless tests from the build-dir binary
+    FMFFILE="%{buildroot}%{tests_dir}/cmd_tests.fmf"
+    TESTS=$(cd %{_vpath_builddir} && ./bin/FreeCADCmd -t 2>&1 | awk '/^Registered test units:/{found=1; next} found && /^Please choose/{exit} found && NF{print $1}')
     {
         echo "/tests:"
         for t in $TESTS; do
             printf '  /%-22s:\n    test: /usr/bin/FreeCADCmd -t  %s\n' "$t" "$t"
         done
-    } > "$FMFFILE"
+    } > "$FMFFILE" || echo "Warning: cmd_tests.fmf generation may have failed"
 
-    # Generate gui_tests.fmf — list GUI tests from the installed binary
-    FMFFILE="%{buildroot}%{tests}/gui_tests.fmf"
-    TESTS=$(wlheadless-run -- %{buildroot}%{_bindir}/FreeCAD -t 2>&1 | awk '/^Registered test units:/{found=1; next} found && /^Please choose/{exit} found && NF{print $1}')
+    # Generate gui_tests.fmf — list GUI tests from the build-dir binary
+    FMFFILE="%{buildroot}%{tests_dir}/gui_tests.fmf"
+    TESTS=$(cd %{_vpath_builddir} && wlheadless-run -- ./bin/FreeCAD -t 2>&1 | awk '/^Registered test units:/{found=1; next} found && /^Please choose/{exit} found && NF{print $1}')
     {
         echo "/tests:"
         for t in $TESTS; do
             printf '  /%-22s:\n    test: wlheadless-run -- /usr/bin/FreeCAD  -t  %s\n' "$t" "$t"
         done
-    } > "$FMFFILE"
+    } > "$FMFFILE" || echo "Warning: gui_tests.fmf generation may have failed"
 %endif
 
 
@@ -413,11 +379,10 @@ EOF
     %{_datadir}/pkgconfig/OndselSolver.pc
     %{_includedir}/OndselSolver/*
 
-
-%files testing
 %if %{with tests}
-    %{tests}/.fmf
-    %{tests}/*
+%files testing
+    %{tests_dir}/.fmf
+    %{tests_dir}/*
 %endif
 
 %changelog

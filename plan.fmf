@@ -3,7 +3,5 @@ summary:
 discover:
     how: fmf
     path: /usr/share/freecad/tests
-    exclude:
-      - /slow_tests/*
 execute:
     how: tmt
