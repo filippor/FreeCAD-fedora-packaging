@@ -237,7 +237,7 @@ Install this package to run or examine the FreeCAD test suite.
     echo 1 > %{buildroot}%{tests_dir}/.fmf/version
 
     cat > %{buildroot}%{tests_dir}/smoke_test.fmf <<'EOF'
-summary: Run All FreeCADCmd python tests
+summary: Smoke Test 
 test: /usr/bin/FreeCADCmd -v
 require: /usr/bin/FreeCADCmd
 duration: 1m
@@ -260,7 +260,7 @@ EOF
     {
         echo "/tests:"
         for t in $TESTS; do
-            printf '  /%-22s:\n    test: /usr/bin/FreeCADCmd -t  %s\n' "$t" "$t"
+            printf '  /%s:\n    test: /usr/bin/FreeCADCmd -t  %s\n' "$t" "$t"
         done
     } > "$FMFFILE" || echo "Warning: cmd_tests.fmf generation may have failed"
 
@@ -270,7 +270,7 @@ EOF
     {
         echo "/tests:"
         for t in $TESTS; do
-            printf '  /%-22s:\n    test: wlheadless-run -- /usr/bin/FreeCAD  -t  %s\n' "$t" "$t"
+            printf '  /%s:\n    test: wlheadless-run -- /usr/bin/FreeCAD  -t  %s\n' "$t" "$t"
         done
     } > "$FMFFILE" || echo "Warning: gui_tests.fmf generation may have failed"
 %endif
