@@ -10,30 +10,23 @@ Usage:
     diff/      – diff PNGs (red pixels = mismatched)
 """
 
-import base64
 import sys
 from pathlib import Path
 
 
-def _b64(path: Path) -> str:
-    if path.is_file():
-        return base64.b64encode(path.read_bytes()).decode()
-    return ""
-
-
-def _img_tag(b64: str, label: str) -> str:
-    if b64:
+def _img_tag(src: str | None, label: str) -> str:
+    if src:
         return (
             f'<figure style="margin:0">'
-            f'<img src="data:image/png;base64,{b64}" style="max-width:100%;border:1px solid #ccc">'
+            f'<img src="{src}" style="max-width:100%;border:1px solid #ccc">'
             f'<figcaption style="text-align:center;font-size:.75em;color:#555">{label}</figcaption>'
             f"</figure>"
         )
     return f'<figure style="margin:0"><div style="width:100%;height:80px;background:#eee;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:.75em">missing</div><figcaption style="text-align:center;font-size:.75em;color:#555">{label}</figcaption></figure>'
 
 
-def _compare_slider_tag(expected_b64: str, actual_b64: str, slider_id: str) -> str:
-    if not expected_b64 or not actual_b64:
+def _compare_slider_tag(expected_src: str | None, actual_src: str | None, slider_id: str) -> str:
+    if not expected_src or not actual_src:
         return (
             '<div class="slider-missing">'
             "missing expected or actual image"
@@ -43,8 +36,8 @@ def _compare_slider_tag(expected_b64: str, actual_b64: str, slider_id: str) -> s
     return (
         f'<div class="compare-wrap" data-slider-id="{slider_id}">'
         f'  <div class="compare-stage">'
-        f'    <img class="compare-img expected" src="data:image/png;base64,{expected_b64}" alt="expected">'
-        f'    <img class="compare-img actual" src="data:image/png;base64,{actual_b64}" alt="actual">'
+        f'    <img class="compare-img expected" src="{expected_src}" alt="expected">'
+        f'    <img class="compare-img actual" src="{actual_src}" alt="actual">'
         f'    <div class="divider" style="left:50%"></div>'
         f'  </div>'
         f'  <input class="slider" type="range" min="0" max="100" value="50" aria-label="Compare expected and actual">'
@@ -74,10 +67,11 @@ def main(out_dir: Path) -> None:
         status = "&#x26A0; diff" if has_diff else "&#x2713; ok"
         status_color = "#c00" if has_diff else "#080"
 
-        actual_b64 = _b64(actual_path)
-        expected_b64 = _b64(expected_path)
-        c = _compare_slider_tag(expected_b64, actual_b64, f"cmp-{idx}")
-        d = _img_tag(_b64(diff_path), "diff") if has_diff else ""
+        actual_src = f"actual/{name}.png" if actual_path.is_file() else None
+        expected_src = f"expected/{name}.png" if expected_path.is_file() else None
+        diff_src = f"diff/{name}.png" if has_diff else None
+        c = _compare_slider_tag(expected_src, actual_src, f"cmp-{idx}")
+        d = _img_tag(diff_src, "diff") if has_diff else ""
 
         detail_row_id = f"detail-{idx}"
         is_open = has_diff

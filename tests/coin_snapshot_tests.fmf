@@ -23,11 +23,28 @@
         fi
 
         REPORT="$OUT/report.html"
-        # Build the public HTTP URL from the request ID and TMT_TEST_DATA local path
-        # /var/ARTIFACTS/<workdir>/... maps to https://artifacts.dev.testing-farm.io/<request_id>/<workdir>/...
-        if [ -n "$TESTING_FARM_REQUEST_ID" ] && [ -n "$TMT_TEST_DATA" ]; then
+        # Build public artifact URLs from available env vars. We prefer explicit
+        # artifact base urls when available, then fallback to request-id mapping.
+        artifact_base=""
+        if [ -n "$TESTING_FARM_ARTIFACTS_URL" ]; then
+          artifact_base="${TESTING_FARM_ARTIFACTS_URL%/}"
+        elif [ -n "$TMT_REPORT_ARTIFACTS_URL" ]; then
+          artifact_base="${TMT_REPORT_ARTIFACTS_URL%/}"
+        elif [ -n "$TESTING_FARM_REQUEST_ID" ]; then
+          artifact_base="https://artifacts.dev.testing-farm.io/${TESTING_FARM_REQUEST_ID}"
+        fi
+
+        echo "TESTING_FARM_REQUEST_ID: ${TESTING_FARM_REQUEST_ID:-<unset>}"
+        echo "TMT_REPORT_ARTIFACTS_URL: ${TMT_REPORT_ARTIFACTS_URL:-<unset>}"
+        echo "TESTING_FARM_ARTIFACTS_URL: ${TESTING_FARM_ARTIFACTS_URL:-<unset>}"
+        echo "TMT_TEST_DATA: ${TMT_TEST_DATA:-<unset>}"
+        echo "artifact_base: ${artifact_base:-<unset>}"
+
+        if [ -n "$artifact_base" ] && [ -n "$TMT_TEST_DATA" ] && [[ "$TMT_TEST_DATA" == /var/ARTIFACTS/* ]]; then
           workdir_rel="${TMT_TEST_DATA#/var/ARTIFACTS/}"
-          report_url="https://artifacts.dev.testing-farm.io/${TESTING_FARM_REQUEST_ID}/${workdir_rel}/CoinNodeSnapshots/report.html"
+          snapshots_url="${artifact_base}/${workdir_rel}/CoinNodeSnapshots"
+          report_url="${snapshots_url}/report.html"
+          echo "CoinNodeSnapshots dir: $snapshots_url/"
         else
           report_url="$REPORT"
         fi
