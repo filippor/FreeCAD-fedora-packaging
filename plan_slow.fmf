@@ -20,7 +20,6 @@ discover:
     path: tests
     test:
       - /slow_tests/*
-    exclude:
-      - /slow_tests/tests/gui_tests/TestCoinNodeSnapshots
+
 execute:
     how: tmt

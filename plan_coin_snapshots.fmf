@@ -4,6 +4,6 @@ discover:
     how: fmf
     path: tests
     test:
-      - /slow_tests/tests/gui_tests/TestCoinNodeSnapshots
+      - /coin_snapshot_tests/*
 execute:
     how: tmt

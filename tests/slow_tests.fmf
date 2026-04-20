@@ -7,32 +7,3 @@
     /TestFemGui:
       test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestFemGui
       duration: 120m
-    /TestCoinNodeSnapshots:
-      test: |
-        set +e
-        
-        OUT="${TMT_TEST_DATA:-/tmp/FreeCADTesting}/CoinNodeSnapshots"
-        mkdir -p "$OUT"
-        
-        echo "Running FreeCAD visual tests..."
-        FC_VISUAL_UPDATE_BASELINE=0 FC_TESTS_DIR=/usr/share/freecad/tests FC_VISUAL_OUT_DIR="$OUT" wlheadless-run --width=1024 --height=768 -- /usr/bin/FreeCAD -t TestCoinNodeSnapshots
-        rc=$?
-        
-        echo "Test exit code: $rc"
-        echo "Generating visual report..."
-        report_script="${TMT_TREE}/scripts/coin_snapshot_report.py"
-
-        if [ -f "$report_script" ]; then
-          echo "Using report script: $report_script"
-          python3 "$report_script" "$OUT" || true
-        else
-          echo "Report script not found at: $report_script"
-        fi
-        
-        REPORT="$OUT/report.html"
-        rel="${REPORT#${TMT_TEST_DATA:-$OUT}/}"
-        artifacts_base="${TESTING_FARM_ARTIFACTS_URL:-${TMT_WEB_URL%/}/artifacts}"
-        echo "Report: ${artifacts_base%/}/$rel"
-        
-        exit $rc
-      duration: 60m

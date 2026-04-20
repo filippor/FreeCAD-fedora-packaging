@@ -5,5 +5,6 @@ discover:
     path: tests
     exclude:
       - /slow_tests/*
+      - /coin_snapshot_tests/*
 execute:
     how: tmt
