@@ -1,0 +1,9 @@
+summary:
+    Run FreeCAD CoinNodeSnapshots visual test
+discover:
+    how: fmf
+    path: tests
+    test:
+      - /slow_tests/tests/gui_tests/TestCoinNodeSnapshots
+execute:
+    how: tmt
