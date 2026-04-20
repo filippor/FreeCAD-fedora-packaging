@@ -23,13 +23,11 @@
         fi
 
         REPORT="$OUT/report.html"
-        # TMT_TEST_DATA is a local path like /var/ARTIFACTS/.../data
-        # Replace the local artifacts root with the public HTTP URL
-        if [ -n "$TESTING_FARM_ARTIFACTS_URL" ] && [ -n "$TMT_TEST_DATA" ]; then
-          # TESTING_FARM_ARTIFACTS_URL is the HTTP base for the whole artifacts tree
-          # TMT_TEST_DATA lives under /var/ARTIFACTS/<workdir>/...
+        # Build the public HTTP URL from the request ID and TMT_TEST_DATA local path
+        # /var/ARTIFACTS/<workdir>/... maps to https://artifacts.dev.testing-farm.io/<request_id>/<workdir>/...
+        if [ -n "$TESTING_FARM_REQUEST_ID" ] && [ -n "$TMT_TEST_DATA" ]; then
           workdir_rel="${TMT_TEST_DATA#/var/ARTIFACTS/}"
-          report_url="${TESTING_FARM_ARTIFACTS_URL%/}/${workdir_rel}/CoinNodeSnapshots/report.html"
+          report_url="https://artifacts.dev.testing-farm.io/${TESTING_FARM_REQUEST_ID}/${workdir_rel}/CoinNodeSnapshots/report.html"
         else
           report_url="$REPORT"
         fi
