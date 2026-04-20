@@ -5,3 +5,4 @@ prepare:
       - xwayland-run
       - weston
       - IfcOpenShell-python3
+      - freecad-testing
