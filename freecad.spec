@@ -38,7 +38,7 @@ Source0:        freecad-sources.tar.gz
 # See FreeCAD-main/src/3rdParty/salomesmesh/CMakeLists.txt to find this out.
 %global bundled_smesh_version 7.7.1.0
 # See /src/3rdParty/PyCXX/CXX/Version.h to find this out.
-%global bundled_pycxx_version 7.1.9
+%global bundled_pycxx_version 7.1.11
 # See /src/3rdParty/OndselSolver/CMakeLists.txt to find this out.
 %global bundled_ondsel_solver_version 1.0.1
 
@@ -128,20 +128,9 @@ Requires:       %{name} = %{epoch}:%{version}-%{release}
 %description libondselsolver-devel
 Development file for OndselSolver
 
-%package testing
-Summary:        FreeCAD developer tests and test results
-BuildArch:      noarch
-Requires:       %{name} = %{epoch}:%{version}-%{release}
-
-%description testing
-Developer tests for FreeCAD and their execution results. This package contains
-test executables, test data, and test result artifacts generated during the build.
-Install this package to run or examine the FreeCAD test suite.
-
 
 #path that contain main FreeCAD sources for cmake
-%global tests %{_datadir}/%{name}/tests
-%global tests_resultdir %{tests}/result/%{_arch}
+%global tests_resultdir %{_datadir}/%{name}/tests/result/%{_arch}
 
 %if %{without debug_info}
 %global debug_package %{nil}
@@ -226,12 +215,6 @@ Install this package to run or examine the FreeCAD test suite.
     mv %{buildroot}%{_libdir}/freecad/share/mime %{buildroot}%{_datadir}/
     mv %{buildroot}%{_libdir}/freecad/share/thumbnailers %{buildroot}%{_datadir}/
     mv %{buildroot}%{_libdir}/freecad/share/pkgconfig %{buildroot}%{_datadir}/
-
-%if %{with tests}
-    # tests/visual is not installed by upstream CMake; copy it from source
-    mkdir -p %{buildroot}%{tests}
-    cp -a %{_vpath_srcdir}/tests/visual %{buildroot}%{tests}/
-%endif
 
 %check
 
@@ -325,6 +308,9 @@ Install this package to run or examine the FreeCAD test suite.
     %{_datadir}/thumbnailers/*
     #find a way to configure in cmake with %%name to avoid conflict with different package name
     %{python3_sitelib}/freecad/*
+%if %{with tests}
+    %tests_resultdir/*
+%endif
 
 
 %files data
@@ -335,10 +321,5 @@ Install this package to run or examine the FreeCAD test suite.
 %files libondselsolver-devel
     %{_datadir}/pkgconfig/OndselSolver.pc
     %{_includedir}/OndselSolver/*
-
-%if %{with tests}
-%files testing
-    %{tests}/*
-%endif
 
 %changelog
