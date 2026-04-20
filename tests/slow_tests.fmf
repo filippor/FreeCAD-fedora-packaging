@@ -9,19 +9,23 @@
       duration: 120m
     /TestCoinNodeSnapshots:
       test: |
+        set +e
+        
         OUT="${TMT_TEST_DATA:-/tmp/FreeCADTesting}/CoinNodeSnapshots"
-        REPORT="$OUT/report.html"
+        mkdir -p "$OUT"
+        
+        echo "Running FreeCAD visual tests..."
         FC_VISUAL_UPDATE_BASELINE=0 FC_TESTS_DIR=/usr/share/freecad/tests FC_VISUAL_OUT_DIR="$OUT" wlheadless-run --width=1024 --height=768 -- /usr/bin/FreeCAD -t TestCoinNodeSnapshots
         rc=$?
+        
+        echo "Test exit code: $rc"
+        echo "Generating visual report..."
         python3 "$(dirname "$0")/../scripts/coin_snapshot_report.py" "$OUT" || true
-
+        
+        REPORT="$OUT/report.html"
         rel="${REPORT#${TMT_TEST_DATA:-$OUT}/}"
         artifacts_base="${TESTING_FARM_ARTIFACTS_URL:-${TMT_WEB_URL%/}/artifacts}"
-        echo "CoinNodeSnapshots report path: $REPORT"
-        echo "CoinNodeSnapshots report URL: ${artifacts_base%/}/$rel"
-
+        echo "Report: ${artifacts_base%/}/$rel"
+        
         exit $rc
-      result: reportifail
-      artifacts:
-        - /tmp/FreeCADTesting/CoinNodeSnapshots/
       duration: 60m
