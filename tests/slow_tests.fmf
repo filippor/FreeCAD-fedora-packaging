@@ -21,4 +21,7 @@
         echo "CoinNodeSnapshots report URL: ${artifacts_base%/}/$rel"
 
         exit $rc
+      result: reportifail
+      artifacts:
+        - /tmp/FreeCADTesting/CoinNodeSnapshots/
       duration: 60m
