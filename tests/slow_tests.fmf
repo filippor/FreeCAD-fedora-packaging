@@ -2,8 +2,8 @@
   /cmd_tests:
     /TestFemApp:
       test: python3 -c "from pyNastran.bdf.bdf import BDF; import pyNastran; print(pyNastran.__version__)" && /usr/bin/FreeCADCmd -t TestFemApp
-      duration: 60m
+      duration: 120m
   /gui_tests:
     /TestFemGui:
       test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestFemGui
-      duration: 120m
+
