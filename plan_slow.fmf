@@ -12,6 +12,7 @@ prepare+:
       - python3-matplotlib
       - python3-colorama
       - python3-docopt-ng
+      - python3-setuptools
   - how: shell
     script:
       - git clone https://github.com/SteveDoyle2/pyNastran.git
