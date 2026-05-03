@@ -15,8 +15,7 @@ prepare+:
   - how: shell
     script:
       - git clone https://github.com/SteveDoyle2/pyNastran.git
-      - cd pyNastran
-      - python3 -m pip install .
+      - cd pyNastran; python3 -m pip install .
       - python3 -c "from pyNastran.bdf.bdf import BDF; import pyNastran; print(pyNastran.__version__)"
 discover:
     how: fmf
