@@ -3,6 +3,7 @@ summary:
 prepare+:
   - how: install
     package:
+      - git
       - gmsh
       - calculix-ccx
       - python3-pip
