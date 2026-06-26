@@ -5,8 +5,6 @@
 %bcond_with bundled_pycxx
 # rpmbuild --without=bundled_smesh:  don't use bundled version of Salome's Mesh
 %bcond_without bundled_smesh
-# rpmbuild --without=bundled_gtest:  don't use bundled version of gtest and gmock
-%bcond_with bundled_gtest
 %bcond_with netgen
 
 # rpmbuild --without=tests   exclude tests in %%check
@@ -45,14 +43,12 @@ Source0:        freecad-sources.tar.gz
 # Utilities
 BuildRequires:  cmake gcc-c++ gettext doxygen swig graphviz gcc-gfortran desktop-file-utils tbb-devel ninja-build strace
 %if %{with tests}
-BuildRequires:  python3-typing-extensions xwayland-run weston
-%if %{without bundled_gtest}
-BuildRequires: gtest-devel gmock-devel
-%endif
+BuildRequires:  python3-typing-extensions xwayland-run weston gtest-devel gmock-devel
+
 %endif
 
 # Development Libraries
-BuildRequires:boost-devel Coin4-devel eigen3-devel freeimage-devel fmt-devel libglvnd-devel libicu-devel libspnav-devel libXmu-devel med-devel mesa-libEGL-devel mesa-libGLU-devel opencascade-devel openmpi-devel python3 python3-devel python3-lark python3-matplotlib python3-pivy python3-pybind11 python3-pyside6-devel python3-shiboken6-devel pyside6-tools qt6-qttools-static qt6-qtsvg-devel vtk-devel xerces-c-devel yaml-cpp-devel
+BuildRequires:boost-devel Coin4-devel eigen3-devel freeimage-devel fmt-devel libglvnd-devel libicu-devel libspnav-devel libXmu-devel med-devel mesa-libEGL-devel mesa-libGLU-devel opencascade-devel openmpi-devel python3 python3-devel python3-lark python3-matplotlib python3-pivy python3-pybind11 python3-pyside6-devel python3-shiboken6-devel pyside6-tools qt6-qttools-static qt6-qtsvg-devel vtk-devel xerces-c-devel yaml-cpp-devel hdf5-static hdf5-devel
 #pcl-devel
 %if %{without bundled_smesh}
 BuildRequires:  smesh-devel
@@ -186,12 +182,6 @@ Install this package to run or examine the FreeCAD test suite.
     %endif
     %if %{with tests}
         -DENABLE_DEVELOPER_TESTS=TRUE \
-    %if %{without bundled_gtest}
-        -DFREECAD_USE_EXTERNAL_GTEST=TRUE \
-    %else
-        -DINSTALL_GTEST=OFF \
-        -DINSTALL_GMOCK=OFF \
-    %endif
     %else
         -DENABLE_DEVELOPER_TESTS=FALSE \
     %endif
