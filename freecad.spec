@@ -28,9 +28,9 @@ Source0:        freecad-sources.tar.gz
 
 # Maintainers:  keep this list of plugins up to date
 # List plugins in %%{_libdir}/%%{name}/lib, less '.so' and 'Gui.so', here
-%global plugins AssemblyApp AssemblyGui CAMSimulator DraftUtils Fem FreeCAD Import Inspection MatGui Materials Measure Mesh MeshPart Part PartDesignGui Path PathApp PathSimulator Points QtUnitGui ReverseEngineering Robot Sketcher Spreadsheet Start Surface TechDraw Web _PartDesign area flatmesh libDriver libDriverDAT libDriverSTL libDriverUNV libE57Format libMEFISTO2 libSMDS libSMESH libSMESHDS libStdMeshers libarea-native tsp_solver libClipper2Z
+%global plugins AssemblyApp AssemblyGui CAMSimulator DraftUtils Fem FreeCAD Import Inspection MatGui Materials Measure Mesh MeshPart Part PartDesignGui Path PathApp PathSimulator Points QtUnitGui ReverseEngineering Robot Sketcher Spreadsheet Start Surface TechDraw Web _PartDesign area flatmesh libDriver libDriverDAT libDriverSTL libDriverUNV libE57Format libMEFISTO2 libSMDS libSMESH libSMESHDS libStdMeshers libarea-native tsp_solver
 
-%global exported_libs libOndselSolver
+%global exported_libs libOndselSolver libClipper2Z
 
 
 # See FreeCAD-main/src/3rdParty/salomesmesh/CMakeLists.txt to find this out.
@@ -124,6 +124,13 @@ Requires:       %{name} = %{epoch}:%{version}-%{release}
 %description libondselsolver-devel
 Development file for OndselSolver
 
+%package libClipper2-devel
+Summary:        Development file for libClipper2
+BuildArch:      noarch
+Requires:       %{name} = %{epoch}:%{version}-%{release}
+
+%description libClipper2-devel
+Development file for libClipper2
 
 %if %{with tests}
 %package testing
@@ -327,6 +334,9 @@ Install this package to run or examine the FreeCAD test suite.
 %files libondselsolver-devel
     %{_datadir}/pkgconfig/OndselSolver.pc
     %{_includedir}/OndselSolver/*
+
+%files libClipper2-devel
+    %{_includedir}/clipper2/*
 
 %if %{with tests}
 %files testing
