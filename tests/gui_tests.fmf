@@ -31,6 +31,8 @@
         test: wlheadless-run -- /usr/bin/FreeCAD  -t  Document
     /Metadata              :
         test: wlheadless-run -- /usr/bin/FreeCAD  -t  Metadata
+    /Recompute             :
+        test: wlheadless-run -- /usr/bin/FreeCAD  -t  Recompute
     /StringHasher          :
         test: wlheadless-run -- /usr/bin/FreeCAD  -t  StringHasher
     /UnicodeTests          :
@@ -47,12 +49,16 @@
         test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestImportGui
     /TestMaterialsGui      :
         test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestMaterialsGui
+    /MeshTestsGui          :
+        test: wlheadless-run -- /usr/bin/FreeCAD  -t  MeshTestsGui
     /TestOpenSCADGui       :
         test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestOpenSCADGui
     /TestPartGui           :
         test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestPartGui
     /TestPartDesignGui     :
         test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestPartDesignGui
+    /TestSketcherGui       :
+        test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestSketcherGui
     /TestTechDrawGui       :
         test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestTechDrawGui
     /Workbench             :
@@ -65,9 +71,17 @@
         test: wlheadless-run -- /usr/bin/FreeCAD  -t  Menu.MenuCreateCases
     /GuiDocument           :
         test: wlheadless-run -- /usr/bin/FreeCAD  -t  GuiDocument
+    /TestGraphicsViewWrapping :
+        test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestGraphicsViewWrapping
+    /TestRubberbandSelection :
+        test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestRubberbandSelection
+    /TestCoinSelectionVisual :
+        test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestCoinSelectionVisual
     /TestCoinNodeSnapshots :
         test: FC_VISUAL_OUT_DIR="${TMT_TEST_DATA:-/tmp/FreeCADTesting}/CoinNodeSnapshots" wlheadless-run --width=1024 --height=768 -- /usr/bin/FreeCAD  -t  TestCoinNodeSnapshots
-    /TestFemApp:
+    /TestViewProviderLink :
+        test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestViewProviderLink
+    /TestFemApp :
       test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestFemApp
-    /TestFemGui:
+    /TestFemGui :
       test: wlheadless-run -- /usr/bin/FreeCAD  -t  TestFemGui
